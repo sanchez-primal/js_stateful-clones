@@ -21,9 +21,7 @@ function transformStateWithClones(state, actions) {
 
     switch (currentAction.type) {
       case 'clear':
-        for (const key of Object.keys(latestState)) {
-          delete latestState[key];
-        }
+        removeKeys(latestState, Object.keys(latestState));
         break;
 
       case 'addProperties':
@@ -31,9 +29,7 @@ function transformStateWithClones(state, actions) {
         break;
 
       case 'removeProperties':
-        for (const key of currentAction.keysToRemove) {
-          delete latestState[key];
-        }
+        removeKeys(latestState, currentAction.keysToRemove);
         break;
 
       default:
@@ -44,10 +40,16 @@ function transformStateWithClones(state, actions) {
       break;
     }
 
-    states.push({ ...latestState }); // it prepares a state for a next action.
+    states.push({ ...latestState }); // it prepares a state for next action.
   }
 
   return states;
+}
+
+function removeKeys(objectReference, keysToRemove) {
+  for (const key of keysToRemove) {
+    delete objectReference[key];
+  }
 }
 
 module.exports = transformStateWithClones;
