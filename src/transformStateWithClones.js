@@ -33,7 +33,7 @@ function transformStateWithClones(state, actions) {
         break;
 
       default:
-        break;
+        throw new Error(`Action ${currentAction.type} not recognized.`);
     }
 
     if (i === actionsQuantity - 1) {
