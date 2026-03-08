@@ -7,17 +7,12 @@
  * @return {Object[]}
  */
 function transformStateWithClones(state, actions) {
-  /*
-   * The latest state is already in the array when it's being worked on.
-   * Is this type of mutation ok? :/
-   */
-
-  const states = [{ ...state }];
   const actionsQuantity = actions.length;
+  const states = [];
+  let latestState = { ...state };
 
   for (let i = 0; i < actionsQuantity; i++) {
     const currentAction = actions[i];
-    const latestState = states[i];
 
     switch (currentAction.type) {
       case 'clear':
@@ -36,11 +31,10 @@ function transformStateWithClones(state, actions) {
         throw new Error(`Action ${currentAction.type} not recognized.`);
     }
 
-    if (i === actionsQuantity - 1) {
-      break;
-    }
-
-    states.push({ ...latestState }); // it prepares a state for next action.
+    states.push(latestState);
+    latestState = { ...latestState }; /* it's most convenient to look at this as
+      "breaking the reference chain", not "creating a new object".
+    */
   }
 
   return states;
